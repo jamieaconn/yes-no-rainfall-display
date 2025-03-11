@@ -23,7 +23,7 @@ const RainfallGraph = () => {
 
   return (
     <div className="w-full h-[400px] mt-8">
-      <div className="relative">
+      <div className="relative h-full">
         {isMobile && (
           <div className="absolute top-0 left-8 text-sm font-medium text-gray-500">
             Rainfall (mm)
