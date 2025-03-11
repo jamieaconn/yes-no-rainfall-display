@@ -153,10 +153,10 @@ const RainfallGraph = () => {
               labelFormatter={(time) => format(new Date(time), 'EEE dd MMM, HH:mm')}
               formatter={(value, name) => {
                 if (name === 'rainfall' || name === 'forecast') {
-                  return [value ? `${value.toFixed(2)} mm` : '0 mm', name === 'rainfall' ? 'Rain' : 'Forecast'];
+                  return [value ? `${Number(value).toFixed(2)} mm` : '0 mm', name === 'rainfall' ? 'Rain' : 'Forecast'];
                 }
                 if (name === 'level' || name === 'prediction') {
-                  return [value ? `${value.toFixed(2)} m` : '-', name === 'level' ? 'Level' : 'Prediction'];
+                  return [value ? `${Number(value).toFixed(2)} m` : '-', name === 'level' ? 'Level' : 'Prediction'];
                 }
                 return [value, name];
               }}
