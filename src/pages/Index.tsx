@@ -7,7 +7,7 @@ const Index = () => {
       <div className="space-y-8">
         {/* Header */}
         <div className="flex justify-center items-center">
-          <h1 className="text-5xl md:text-7xl font-bold text-gray-800 text-center">
+          <h1 className="text-7xl md:text-9xl font-bold text-gray-800 text-center">
             NO
           </h1>
         </div>
