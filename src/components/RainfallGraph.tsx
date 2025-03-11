@@ -18,19 +18,15 @@ const generateData = () => {
 };
 
 const RainfallGraph = () => {
-  const data = generateData();
+  const rawData = generateData();
   const isMobile = useIsMobile();
-  const midPoint = Math.floor(data.length / 2);
+  const midPoint = Math.floor(rawData.length / 2);
 
-  // Split the data into two arrays and ensure proper time continuity
-  const actualData = data.map((item, index) => ({
-    ...item,
-    actualRainfall: index < midPoint ? item.rainfall : undefined
-  }));
-
-  const predictionData = data.map((item, index) => ({
-    ...item,
-    predictedRainfall: index >= midPoint ? item.rainfall : undefined
+  // Process the data to include both actual and predicted rainfall
+  const data = rawData.map((item, index) => ({
+    time: item.time,
+    actualRainfall: index < midPoint ? item.rainfall : null,
+    predictedRainfall: index >= midPoint ? item.rainfall : null
   }));
 
   return (
@@ -60,7 +56,10 @@ const RainfallGraph = () => {
             <YAxis />
             <Tooltip
               labelFormatter={(time) => format(new Date(time), 'MMM dd, HH:mm')}
-              formatter={(value) => [`${value?.toString().includes('.') ? Number(value).toFixed(1) : value} mm`, 'Rainfall']}
+              formatter={(value, name) => {
+                if (value === null) return ['-', name];
+                return [`${value?.toString().includes('.') ? Number(value).toFixed(1) : value} mm`, name === 'actualRainfall' ? 'Level' : 'Prediction'];
+              }}
             />
             <Legend 
               verticalAlign="bottom" 
@@ -73,6 +72,7 @@ const RainfallGraph = () => {
               stroke="#8884d8"
               strokeWidth={2}
               dot={false}
+              connectNulls={false}
             />
             <Line
               type="monotone"
@@ -82,6 +82,7 @@ const RainfallGraph = () => {
               strokeWidth={2}
               strokeDasharray="5 5"
               dot={false}
+              connectNulls={false}
             />
           </LineChart>
         </ResponsiveContainer>
