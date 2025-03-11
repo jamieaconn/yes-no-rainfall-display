@@ -34,8 +34,8 @@ const RainfallGraph = () => {
             data={data}
             margin={{
               top: isMobile ? 20 : 20,
-              right: 30,
-              left: isMobile ? 5 : 20,
+              right: isMobile ? 10 : 30,
+              left: isMobile ? 0 : 20,
               bottom: 20,
             }}
           >
