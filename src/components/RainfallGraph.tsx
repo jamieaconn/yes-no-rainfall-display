@@ -1,6 +1,7 @@
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { format } from 'date-fns';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // Generate sample data for the past 3 days with hourly readings
 const generateData = () => {
@@ -18,16 +19,22 @@ const generateData = () => {
 
 const RainfallGraph = () => {
   const data = generateData();
+  const isMobile = useIsMobile();
 
   return (
     <div className="w-full h-[400px] mt-8">
+      {isMobile && (
+        <div className="text-center text-sm font-medium text-gray-500 mb-2">
+          Rainfall (mm)
+        </div>
+      )}
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
           data={data}
           margin={{
             top: 20,
             right: 30,
-            left: 20,
+            left: isMobile ? 5 : 20,
             bottom: 20,
           }}
         >
@@ -38,11 +45,11 @@ const RainfallGraph = () => {
             interval={8}
           />
           <YAxis
-            label={{ value: 'Rainfall (mm)', angle: -90, position: 'insideLeft' }}
+            label={!isMobile ? { value: 'Rainfall (mm)', angle: -90, position: 'insideLeft' } : undefined}
           />
           <Tooltip
             labelFormatter={(time) => format(new Date(time), 'MMM dd, HH:mm')}
-            formatter={(value) => [`${value.toFixed(1)} mm`, 'Rainfall']}
+            formatter={(value) => [`${value?.toString().includes('.') ? Number(value).toFixed(1) : value} mm`, 'Rainfall']}
           />
           <Line
             type="monotone"
