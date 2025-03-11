@@ -42,8 +42,11 @@ const RainfallGraph = () => {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
               dataKey="time"
-              tickFormatter={(time) => format(new Date(time), 'HH:mm')}
-              interval={8}
+              tickFormatter={(time) => {
+                const date = new Date(time);
+                return format(date, 'EEE\nha').replace('AM', 'am').replace('PM', 'pm');
+              }}
+              interval={5}
             />
             <YAxis
               label={!isMobile ? { value: 'Rainfall (mm)', angle: -90, position: 'insideLeft' } : undefined}
