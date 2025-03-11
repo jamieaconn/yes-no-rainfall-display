@@ -1,3 +1,4 @@
+
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { format } from 'date-fns';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -43,7 +44,9 @@ const RainfallGraph = () => {
               dataKey="time"
               tickFormatter={(time) => {
                 const date = new Date(time);
-                return format(date, 'EEE\nha').replace('AM', 'am').replace('PM', 'pm');
+                const dayFormat = format(date, 'EEE');
+                const timeFormat = format(date, 'ha').replace('AM', 'am').replace('PM', 'pm');
+                return `${dayFormat}\n${timeFormat}`;
               }}
               interval={6}
             />
