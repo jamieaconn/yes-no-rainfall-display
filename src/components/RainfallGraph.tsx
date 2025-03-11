@@ -73,7 +73,7 @@ const RainfallGraph = () => {
 
   return (
     <div className="w-full">
-      <div className="w-full h-[400px]">
+      <div className="w-full h-[400px] mb-[-15px]">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
             data={data}
