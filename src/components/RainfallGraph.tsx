@@ -1,4 +1,3 @@
-
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { format } from 'date-fns';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -46,7 +45,7 @@ const RainfallGraph = () => {
                 const date = new Date(time);
                 return format(date, 'EEE\nha').replace('AM', 'am').replace('PM', 'pm');
               }}
-              interval={5}
+              interval={6}
             />
             <YAxis
               label={!isMobile ? { value: 'Rainfall (mm)', angle: -90, position: 'insideLeft' } : undefined}
