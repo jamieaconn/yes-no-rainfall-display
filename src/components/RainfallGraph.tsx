@@ -93,22 +93,22 @@ const generateData = () => {
 
 const CustomLegend = () => {
   return (
-    <div className="flex flex-wrap items-center justify-center gap-6 mt-2 mb-4">
-      <div className="flex items-center gap-2">
-        <div className="w-4 h-4 bg-black"></div>
-        <span className="text-sm">Rain</span>
+    <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4 mt-2">
+      <div className="flex items-center gap-1">
+        <div className="w-3 h-3 bg-black"></div>
+        <span className="text-xs">Rain</span>
       </div>
-      <div className="flex items-center gap-2">
-        <div className="w-4 h-4 bg-gray-400"></div>
-        <span className="text-sm">Forecast</span>
+      <div className="flex items-center gap-1">
+        <div className="w-3 h-3 bg-gray-400"></div>
+        <span className="text-xs">Forecast</span>
       </div>
-      <div className="flex items-center gap-2">
-        <div className="w-8 h-[2px] bg-blue-500"></div>
-        <span className="text-sm">Level</span>
+      <div className="flex items-center gap-1">
+        <div className="w-6 h-[2px] bg-blue-500"></div>
+        <span className="text-xs">Level</span>
       </div>
-      <div className="flex items-center gap-2">
-        <div className="w-8 h-[2px] border-blue-500 border-t-2 border-dashed"></div>
-        <span className="text-sm">Prediction</span>
+      <div className="flex items-center gap-1">
+        <div className="w-6 h-[2px] border-blue-500 border-t-2 border-dashed"></div>
+        <span className="text-xs">Prediction</span>
       </div>
     </div>
   );
@@ -119,7 +119,6 @@ const RainfallGraph = () => {
 
   return (
     <div className="w-full">
-      <CustomLegend />
       <div className="w-full h-[400px]">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
@@ -201,6 +200,7 @@ const RainfallGraph = () => {
           </ComposedChart>
         </ResponsiveContainer>
       </div>
+      <CustomLegend />
     </div>
   );
 };
