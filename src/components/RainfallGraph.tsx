@@ -15,7 +15,7 @@ import { fetchRainfallData } from '@/utils/dataUtils';
 
 const CustomLegend = () => {
   return (
-    <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4 mt-2 text-xs">
+    <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4 text-xs">
       <div className="flex items-center gap-1">
         <div className="w-2 h-2 bg-black"></div>
         <span>Rain</span>
