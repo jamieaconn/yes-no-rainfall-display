@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   ComposedChart, 
   Line, 
@@ -8,114 +8,68 @@ import {
   YAxis, 
   CartesianGrid, 
   Tooltip, 
-  ResponsiveContainer,
-  Legend
+  ResponsiveContainer
 } from 'recharts';
-import { format, addHours } from 'date-fns';
-
-// Generate sample data for 3 days with hourly readings
-const generateData = () => {
-  const data = [];
-  // Start from Thursday 00:00
-  const startDate = new Date();
-  startDate.setHours(0, 0, 0, 0);
-  startDate.setDate(startDate.getDate() - 2); // Set to Thursday
-  
-  // Generate 72 hours of data (3 days)
-  for (let i = 0; i < 72; i++) {
-    const time = addHours(startDate, i);
-    const isFuture = i > 36; // Data after Friday 12:00 is future prediction
-    
-    // Generate more realistic rainfall patterns
-    let rainfall = 0;
-    if (Math.random() > 0.7) {
-      rainfall = Math.random() * 1.2; // Random rainfall value up to 1.2
-    }
-    
-    // Create rainfall patterns like in the image
-    if (i > 8 && i < 24) {
-      rainfall = Math.random() > 0.5 ? Math.random() * 1.2 : 0; // More rain on Thursday morning
-    }
-    
-    if (i > 48 && i < 60) {
-      rainfall = Math.random() > 0.4 ? Math.random() * 1 : 0; // More rain on Friday evening
-    }
-    
-    // Water level calculation
-    let level = 0.3; // Base level
-    
-    // Rising water level based on previous rainfall
-    if (i > 12) { 
-      level = 0.3 + Math.min(1.2, data.slice(Math.max(0, i-12), i)
-        .reduce((sum, item) => sum + item.rainfall * 0.1, 0));
-    }
-    
-    // Future forecast rainfall (gray bars)
-    let forecast = 0;
-    if (isFuture) {
-      forecast = Math.random() > 0.7 ? Math.random() * 1.1 : 0;
-      if (i > 60) {
-        forecast = Math.random() > 0.5 ? Math.random() * 0.5 : 0; // Less forecast rain on Saturday
-      }
-    }
-    
-    // Generate prediction data (dotted line)
-    let prediction = null;
-    if (i >= 24) { // Start prediction from Thursday 12:00
-      prediction = level;
-      
-      // Make prediction rise and fall based on forecast
-      if (isFuture) {
-        const upcomingRain = data.slice(Math.max(0, i-6), i)
-          .reduce((sum, item) => sum + (item.forecast || 0) * 0.3, 0);
-        prediction = level + upcomingRain;
-        
-        if (i >= 58 && i <= 64) {
-          prediction = Math.min(1.4, prediction + 0.3); // Peak around Saturday 00:00
-        }
-        if (i > 64) {
-          prediction = Math.max(0.7, prediction - 0.1); // Decline after Saturday 00:00
-        }
-      }
-    }
-    
-    data.push({
-      time,
-      rainfall: isFuture ? 0 : rainfall, // Only show actual rainfall, not future
-      forecast: isFuture ? forecast : 0, // Only show forecast in future
-      level: isFuture ? null : level, // Only show level for current/past
-      prediction // Show prediction from Thursday 12:00 onwards
-    });
-  }
-  
-  return data;
-};
+import { format } from 'date-fns';
+import { fetchRainfallData } from '@/utils/dataUtils';
 
 const CustomLegend = () => {
   return (
-    <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4 mt-2">
+    <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4 mt-2 text-xs">
       <div className="flex items-center gap-1">
-        <div className="w-3 h-3 bg-black"></div>
-        <span className="text-xs">Rain</span>
+        <div className="w-2 h-2 bg-black"></div>
+        <span>Rain</span>
       </div>
       <div className="flex items-center gap-1">
-        <div className="w-3 h-3 bg-gray-400"></div>
-        <span className="text-xs">Forecast</span>
+        <div className="w-2 h-2 bg-gray-400"></div>
+        <span>Forecast</span>
       </div>
       <div className="flex items-center gap-1">
-        <div className="w-6 h-[2px] bg-blue-500"></div>
-        <span className="text-xs">Level</span>
+        <div className="w-4 h-[2px] bg-blue-500"></div>
+        <span>Level</span>
       </div>
       <div className="flex items-center gap-1">
-        <div className="w-6 h-[2px] border-blue-500 border-t-2 border-dashed"></div>
-        <span className="text-xs">Prediction</span>
+        <div className="w-4 h-[2px] border-blue-500 border-t-2 border-dashed"></div>
+        <span>Prediction</span>
       </div>
     </div>
   );
 };
 
 const RainfallGraph = () => {
-  const [data] = useState(generateData);
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setIsLoading(true);
+        const rainfallData = await fetchRainfallData();
+        setData(rainfallData);
+        setError(null);
+      } catch (err) {
+        console.error('Error loading rainfall data:', err);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  if (isLoading) {
+    return <div className="w-full h-[400px] flex items-center justify-center">Loading data...</div>;
+  }
+
+  if (error) {
+    return <div className="w-full h-[400px] flex items-center justify-center text-red-500">Error loading data: {error}</div>;
+  }
+
+  if (!data || data.length === 0) {
+    return <div className="w-full h-[400px] flex items-center justify-center">No data available</div>;
+  }
 
   return (
     <div className="w-full">
