@@ -17,6 +17,28 @@ const generateData = () => {
   return data;
 };
 
+// Custom Legend renderer to display solid and dashed lines in legend
+const CustomLegend = (props: any) => {
+  const { payload } = props;
+  
+  return (
+    <div className="flex justify-center items-center gap-8 pt-4">
+      {payload.map((entry: any, index: number) => (
+        <div key={`item-${index}`} className="flex items-center gap-2">
+          <span 
+            className="inline-block w-8 h-0 border-t-2" 
+            style={{ 
+              borderColor: entry.color, 
+              borderStyle: entry.value === 'Prediction' ? 'dashed' : 'solid'
+            }}
+          />
+          <span className="text-sm">{entry.value}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 const RainfallGraph = () => {
   const rawData = generateData();
   const isMobile = useIsMobile();
@@ -62,6 +84,7 @@ const RainfallGraph = () => {
               }}
             />
             <Legend 
+              content={<CustomLegend />}
               verticalAlign="bottom" 
               height={36}
             />
