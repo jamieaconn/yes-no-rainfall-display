@@ -1,5 +1,5 @@
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { format } from 'date-fns';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -22,14 +22,20 @@ const RainfallGraph = () => {
   const isMobile = useIsMobile();
   const midPoint = Math.floor(data.length / 2);
 
+  // Split the data into two arrays and ensure proper time continuity
+  const actualData = data.map((item, index) => ({
+    ...item,
+    actualRainfall: index < midPoint ? item.rainfall : undefined
+  }));
+
+  const predictionData = data.map((item, index) => ({
+    ...item,
+    predictedRainfall: index >= midPoint ? item.rainfall : undefined
+  }));
+
   return (
     <div className="w-full h-[400px] mt-8">
       <div className="relative h-full">
-        {isMobile && (
-          <div className="absolute top-0 left-8 text-sm font-medium text-gray-500">
-            Rainfall (mm)
-          </div>
-        )}
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             data={data}
@@ -56,24 +62,26 @@ const RainfallGraph = () => {
               labelFormatter={(time) => format(new Date(time), 'MMM dd, HH:mm')}
               formatter={(value) => [`${value?.toString().includes('.') ? Number(value).toFixed(1) : value} mm`, 'Rainfall']}
             />
-            {/* First half of the line (solid) */}
+            <Legend 
+              verticalAlign="bottom" 
+              height={36}
+            />
             <Line
               type="monotone"
-              dataKey="rainfall"
+              name="Level"
+              dataKey="actualRainfall"
               stroke="#8884d8"
               strokeWidth={2}
               dot={false}
-              data={data.slice(0, midPoint)}
             />
-            {/* Second half of the line (dashed) */}
             <Line
               type="monotone"
-              dataKey="rainfall"
+              name="Prediction"
+              dataKey="predictedRainfall"
               stroke="#8884d8"
               strokeWidth={2}
               strokeDasharray="5 5"
               dot={false}
-              data={data.slice(midPoint)}
             />
           </LineChart>
         </ResponsiveContainer>
