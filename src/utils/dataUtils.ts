@@ -2,7 +2,7 @@
 import { format } from 'date-fns';
 
 export interface RainfallDataPoint {
-  time: string;
+  time: string | Date;
   rainfall: number;
   forecast?: number;
   level: number;

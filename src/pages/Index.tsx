@@ -6,9 +6,9 @@ const Index = () => {
     <div className="min-h-screen p-2 md:p-8 max-w-7xl mx-auto">
       <div className="space-y-8">
         {/* Header */}
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
-            Rainfall and Water Level Monitor
+        <div className="flex justify-center items-center">
+          <h1 className="text-5xl md:text-7xl font-bold text-gray-800 text-center">
+            NO
           </h1>
         </div>
 
