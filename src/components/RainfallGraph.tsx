@@ -1,5 +1,5 @@
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Bar } from 'recharts';
 import { format } from 'date-fns';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -47,6 +47,7 @@ const RainfallGraph = () => {
   // Process the data to include both actual and predicted rainfall
   const data = rawData.map((item, index) => ({
     time: item.time,
+    rainfall: item.rainfall, // Add this to be used by the bar chart
     actualRainfall: index < midPoint ? item.rainfall : null,
     predictedRainfall: index >= midPoint ? item.rainfall : null
   }));
@@ -80,6 +81,7 @@ const RainfallGraph = () => {
               labelFormatter={(time) => format(new Date(time), 'MMM dd, HH:mm')}
               formatter={(value, name) => {
                 if (value === null) return ['-', name];
+                if (name === 'rainfall') return [`${Number(value).toFixed(1)} mm`, 'Rainfall'];
                 return [`${value?.toString().includes('.') ? Number(value).toFixed(1) : value} mm`, name === 'actualRainfall' ? 'Level' : 'Prediction'];
               }}
             />
@@ -87,6 +89,14 @@ const RainfallGraph = () => {
               content={<CustomLegend />}
               verticalAlign="bottom" 
               height={36}
+            />
+            {/* Add the Bar chart first so it renders behind the lines */}
+            <Bar 
+              dataKey="rainfall" 
+              fill="#E5E5E5" 
+              opacity={0.7} 
+              name="Rainfall"
+              isAnimationActive={false}
             />
             <Line
               type="monotone"
