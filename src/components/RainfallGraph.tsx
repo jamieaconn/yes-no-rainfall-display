@@ -23,43 +23,45 @@ const RainfallGraph = () => {
 
   return (
     <div className="w-full h-[400px] mt-8">
-      {isMobile && (
-        <div className="text-center text-sm font-medium text-gray-500 mb-2">
-          Rainfall (mm)
-        </div>
-      )}
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart
-          data={data}
-          margin={{
-            top: 20,
-            right: 30,
-            left: isMobile ? 5 : 20,
-            bottom: 20,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis
-            dataKey="time"
-            tickFormatter={(time) => format(new Date(time), 'HH:mm')}
-            interval={8}
-          />
-          <YAxis
-            label={!isMobile ? { value: 'Rainfall (mm)', angle: -90, position: 'insideLeft' } : undefined}
-          />
-          <Tooltip
-            labelFormatter={(time) => format(new Date(time), 'MMM dd, HH:mm')}
-            formatter={(value) => [`${value?.toString().includes('.') ? Number(value).toFixed(1) : value} mm`, 'Rainfall']}
-          />
-          <Line
-            type="monotone"
-            dataKey="rainfall"
-            stroke="#8884d8"
-            strokeWidth={2}
-            dot={false}
-          />
-        </LineChart>
-      </ResponsiveContainer>
+      <div className="relative">
+        {isMobile && (
+          <div className="absolute top-0 left-8 text-sm font-medium text-gray-500">
+            Rainfall (mm)
+          </div>
+        )}
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart
+            data={data}
+            margin={{
+              top: isMobile ? 20 : 20,
+              right: 30,
+              left: isMobile ? 5 : 20,
+              bottom: 20,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              dataKey="time"
+              tickFormatter={(time) => format(new Date(time), 'HH:mm')}
+              interval={8}
+            />
+            <YAxis
+              label={!isMobile ? { value: 'Rainfall (mm)', angle: -90, position: 'insideLeft' } : undefined}
+            />
+            <Tooltip
+              labelFormatter={(time) => format(new Date(time), 'MMM dd, HH:mm')}
+              formatter={(value) => [`${value?.toString().includes('.') ? Number(value).toFixed(1) : value} mm`, 'Rainfall']}
+            />
+            <Line
+              type="monotone"
+              dataKey="rainfall"
+              stroke="#8884d8"
+              strokeWidth={2}
+              dot={false}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };
