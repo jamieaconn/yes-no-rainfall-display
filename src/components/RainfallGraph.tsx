@@ -1,5 +1,5 @@
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Bar } from 'recharts';
+import { ComposedChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { format } from 'date-fns';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -29,7 +29,7 @@ const CustomLegend = (props: any) => {
             className="inline-block w-8 h-0 border-t-2" 
             style={{ 
               borderColor: entry.color, 
-              borderStyle: entry.value === 'Prediction' ? 'dashed' : 'solid'
+              borderStyle: entry.value === 'Prediction' ? 'dashed' : (entry.value === 'Rainfall' ? 'solid' : 'solid')
             }}
           />
           <span className="text-sm">{entry.value}</span>
@@ -56,7 +56,7 @@ const RainfallGraph = () => {
     <div className="w-full h-[400px] mt-8">
       <div className="relative h-full">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart
+          <ComposedChart
             data={data}
             margin={{
               top: isMobile ? 20 : 20,
@@ -117,7 +117,7 @@ const RainfallGraph = () => {
               dot={false}
               connectNulls={false}
             />
-          </LineChart>
+          </ComposedChart>
         </ResponsiveContainer>
       </div>
     </div>
