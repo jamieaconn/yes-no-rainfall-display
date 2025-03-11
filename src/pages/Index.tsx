@@ -1,9 +1,8 @@
-
 import RainfallGraph from '@/components/RainfallGraph';
 
 const Index = () => {
   return (
-    <div className="min-h-screen p-4 md:p-8 max-w-7xl mx-auto">
+    <div className="min-h-screen p-2 md:p-8 max-w-7xl mx-auto">
       <div className="space-y-8">
         {/* Header */}
         <div className="flex justify-between items-center">
@@ -13,7 +12,7 @@ const Index = () => {
         </div>
 
         {/* Rainfall Graph Card */}
-        <div className="bg-white p-4 md:p-6 rounded-lg shadow-lg">
+        <div className="bg-white p-2 md:p-6 rounded-lg shadow-lg">
           <h2 className="text-xl font-semibold mb-4">Rainfall, Water Level and Predictions</h2>
           <RainfallGraph />
         </div>
